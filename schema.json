@@ -1,0 +1,287 @@
+//----------------------------------
+//  COMMANDS
+//----------------------------------
+{
+    "type": "command",
+    "content": {
+        "command": "start"
+    }
+},
+{
+    "type": "command",
+    "content": {
+        "command": "stop"
+    }
+},
+{
+    "type": "command",
+    "content": {
+        "command": "rename",
+        "rename": "Beatrix"
+    }
+}
+//----------------------------------
+//  RESPONSES
+//----------------------------------
+// start_game
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "start": true
+        }
+    }
+}
+// director_election_begin
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "player": "uuid"
+        }
+    }
+}
+// vote_collection
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "vote": "lumos"
+        }
+    }
+}
+//minister_draw
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "draw": true
+        }
+    }
+}
+// minister_discard
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "law": "phenixorder"
+        }
+    }
+}
+
+// director_veto
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "veto": false
+        }
+    }
+}
+// director_discard
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "law": "deatheater"
+        }
+    }
+}
+// director_asked_veto
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "veto": true
+        }
+    }
+}
+// minister_veto_response
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "veto": false
+        }
+    }
+}
+// player_to_avada_kedavra_selection
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "player": "uuid"
+        }
+    }
+}
+// spying_player_selection
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "player": "uuid"
+        }
+    }
+}
+// minister_check_top_cards
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "done": true
+        }
+    }
+}
+// next_minister_selection
+{
+    "type": "response",
+    "content": {
+        "step": 0,
+        "data": {
+            "player": "uuid"
+        }
+    }
+}
+//----------------------------------
+//  POP-UPS
+//----------------------------------
+{
+    "type": "pop-up",
+    "content": {
+        "message": "la partie va bientôt commencer...",
+        "timeout": 2,
+        "image": "voldemort_elected.png"
+    }
+}
+//----------------------------------
+//  MESSAGES
+//----------------------------------
+{
+    "type": "message",
+    "content": {
+        "message": "la partie va bientôt commencer..."
+    }
+}
+//----------------------------------
+//  IDENTIFY
+//----------------------------------
+{
+    "type": "identify",
+    "content": {
+        "uuid": "renkjgjrsngqlkfqnlknv"
+    }
+}
+//----------------------------------
+//  EXCEPTIONS
+//----------------------------------
+{
+    "type": "exception",
+    "content": {
+        "message": "un problème est survenu !"
+    }
+}
+//----------------------------------
+//  DELAY
+//----------------------------------
+{
+    "type": "delay",
+    "content": {
+        "time_sec": "2"
+    }
+}
+//----------------------------------
+//  GAME-STATUS
+//----------------------------------
+{
+  "board": {
+    "deatheater": {
+      "voted": 3
+    },
+    "phenixorder": {
+      "voted": 4
+    },
+    "powers": [
+      "none",
+      "divination",
+      "endoloris",
+      "impero",
+      "avada_kedavra",
+      "none"
+    ]
+  },
+  "election_tracker": 0,
+  "laws": {
+    "discard": [ "deatheater" ],
+    "drawn": [],
+    "stack": [
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "deatheater",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder",
+      "phenixorder"
+    ]
+  },
+  "players": [
+    {
+      "connected": true,
+      "dead": false,
+      "director": false,
+      "election": {
+        "former_minister": false,
+        "former_director": false,
+        "in_progress": false,
+        "target": false,
+        "vote": "none",
+        "voted": false
+      },
+      "faction": "deatheater",
+      "minister": false,
+      "name": "Player",
+      "playing": false,
+      "role": "Beatrix",
+      "uuid": "93e09de8-f804-47f9-954d-8776f4042b67"
+    }
+  ],
+  "started": false,
+  "step": {
+    "id": 0,
+    "name": "En attente du lancement d'une partie"
+  }
+}

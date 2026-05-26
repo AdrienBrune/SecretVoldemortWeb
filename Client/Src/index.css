@@ -1,0 +1,71 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-image: url('/Ressources/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* ── Barre de délai serveur : expansion depuis le centre ── */
+@keyframes expandFromCenter {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+
+/* ── Scrollbar globale (WebKit) ── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Scrollbar liste joueurs ── */
+.scrollbar-players::-webkit-scrollbar {
+  width: 3px;
+}
+.scrollbar-players::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-players::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.25);
+  border-radius: 3px;
+}
+.scrollbar-players::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 168, 76, 0.5);
+}
+
+/* ── Scrollbar panneau rôles ── */
+.scrollbar-roles::-webkit-scrollbar {
+  width: 3px;
+}
+.scrollbar-roles::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-roles::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+.scrollbar-roles::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
