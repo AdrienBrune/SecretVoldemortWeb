@@ -8,6 +8,8 @@ cmake_policy(SET CMP0135 NEW)
 
 include(FetchContent)
 
+option(ENABLE_REACT_DEBUG "Activer le mode debug dans l'application React" OFF)
+
 # ── nlohmann/json (header-only) ───────────────────────────────────────────────
 FetchContent_Declare(json
     URL      https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
@@ -124,6 +126,7 @@ add_custom_command(TARGET SecretVoldemortServer POST_BUILD
 )
 
 # ── Build React client + deploiement dans Release/www/ ───────────────────────
+
 if(WIN32)
     find_program(NPM_CMD NAMES npm.cmd npm)
 else()
@@ -131,9 +134,15 @@ else()
 endif()
 
 if(NPM_CMD)
+    if(ENABLE_REACT_DEBUG)
+        set(REACT_DEBUG_VALUE "true")
+    else()
+        set(REACT_DEBUG_VALUE "false")
+    endif()
+
     add_custom_command(TARGET SecretVoldemortServer POST_BUILD
         COMMAND ${NPM_CMD} install
-        COMMAND ${NPM_CMD} run build
+        COMMAND cmd /c "set VITE_APP_DEBUG=${REACT_DEBUG_VALUE}&& npm run build"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Client"
         COMMENT "Build React client..."
     )

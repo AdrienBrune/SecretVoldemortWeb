@@ -5,16 +5,29 @@ set ROOT_DIR=%~dp0
 set SERVER_EXE=Release\SecretVoldemortServer.exe
 set BUILD_DIR=Server\build
 
-:: ── Option -c : compilation ───────────────────────────────────────────────────
-if "%1"=="-c" (
+:: default - release mode
+set CONFIG_TYPE=Release
+set REACT_DEBUG_FLAG=OFF
+
+if "%1"=="-d" (
+    set CONFIG_TYPE=Debug
+    set REACT_DEBUG_FLAG=ON
+)
+
+:: ── Option -r/-d : compilation ───────────────────────────────────────────────────
+set MATCH=
+if "%1"=="-r" set MATCH=true
+if "%1"=="-d" set MATCH=true
+
+if defined MATCH (
     echo [COMPILE] Configuration CMake...
     if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
-    cmake -S . -B "%BUILD_DIR%" -DCMAKE_BUILD_TYPE=Release
+    cmake -S . -B "%BUILD_DIR%" -DCMAKE_BUILD_TYPE=%CONFIG_TYPE% -DENABLE_REACT_DEBUG=%REACT_DEBUG_FLAG%
     if errorlevel 1 ( echo [ERREUR] cmake configure a echoue & pause & exit /b 1 )
 
     echo.
     echo [COMPILE] Build serveur + client React...
-    cmake --build "%BUILD_DIR%" --config Release
+    cmake --build "%BUILD_DIR%" --config %CONFIG_TYPE%
     if errorlevel 1 ( echo [ERREUR] cmake build a echoue & pause & exit /b 1 )
 
     echo.
@@ -25,7 +38,7 @@ if "%1"=="-c" (
 :: ── Verification exe serveur ──────────────────────────────────────────────────
 if not exist "%SERVER_EXE%" (
     echo [ERREUR] Executable introuvable : %SERVER_EXE%
-    echo Lancez ce script avec l'option -c pour compiler : start_server.bat -c
+    echo Lancez ce script avec l'option -r pour compiler en release et -d pour compiler en debug : start_server.bat -r/-d
     pause
     exit /b 1
 )

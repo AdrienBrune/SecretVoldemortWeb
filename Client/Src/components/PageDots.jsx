@@ -1,6 +1,10 @@
 ﻿import { theme } from '../theme'
 
-const ALL_PAGES = ['home', 'game', 'debug']
+const DEBUG_MODE = import.meta.env.VITE_APP_DEBUG === 'true';
+
+const ALL_PAGES = DEBUG_MODE 
+  ? ['home', 'game', 'debug'] 
+  : ['home', 'game'];
 
 const dotBase = {
   borderRadius: '50%',
