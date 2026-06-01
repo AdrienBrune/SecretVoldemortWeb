@@ -8,10 +8,11 @@ const GameContext = createContext(null)
 export function GameProvider({ host, children }) {
   const [connected,   setConnected]   = useState(false)
   const [myUuid,      setMyUuid]      = useState(null)
-  const [gameStatus,  setGameStatus]  = useState(null)   // "game" frame
-  const [messages,    setMessages]    = useState([])     // "message" frame
-  const [popup,       setPopup]       = useState(null)   // "pop-up" frame
-  const [delay,       setDelay]       = useState(null)   // "delay" frame
+  const [gameStatus,  setGameStatus]  = useState(null)
+  const [messages,    setMessages]    = useState([])
+  const [popup,       setPopup]       = useState(null)
+  const [delay,       setDelay]       = useState(null)
+  const [chatMessageList, setChatMessageList] = useState([]);
 
   const [volume, setVolumeState] = useState(() => parseFloat(localStorage.getItem('soundVolume') ?? '0.5'))
 
@@ -53,6 +54,16 @@ export function GameProvider({ host, children }) {
         setMessages(prev => [...prev, msg.content.message])
         break
 
+      case 'chatbox': {
+        const incomingMsg = {
+          id: msg.content.id || Date.now() + Math.random().toString(),
+          uuid: msg.content.sender,
+          text: msg.content.message
+        };
+        setChatMessageList((prevMessages) => [...prevMessages, incomingMsg]);
+        break;
+      }
+
       case 'pop-up':
         clearTimeout(popupTimerRef.current)
         setPopup(msg.content)
@@ -80,7 +91,14 @@ export function GameProvider({ host, children }) {
     }
   }, [])
 
-  const { send } = useWebSocket(host, handleMessage)
+  const handleMessageRef = useRef(null)
+  handleMessageRef.current = handleMessage
+  
+  const stableHandleMessage = useCallback((msg) => {
+    handleMessageRef.current?.(msg)
+  }, [])
+
+  const { send } = useWebSocket(host, stableHandleMessage)
   sendRef.current = send
 
   useEffect(() => {
@@ -99,6 +117,16 @@ export function GameProvider({ host, children }) {
       }
     })
   }, [send, gameStatus?.step?.id])
+
+  const sendChatMessage = useCallback((text) => {
+    send({
+      type: 'chatbox',
+      content: {
+        sender: myUuid,
+        text: text
+      }
+    })
+  }, [send, myUuid])
 
   const sendCommand = useCallback((cmdData) => {
     let content = {};
@@ -183,6 +211,8 @@ export function GameProvider({ host, children }) {
       playSound,
       volume,
       setVolume,
+      chatMessageList,
+      sendChatMessage
     }}>
       {children}
     </GameContext.Provider>

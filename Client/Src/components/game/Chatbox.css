@@ -1,0 +1,198 @@
+.chat-sliding-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 30svw;
+    height: 100svh;
+    background-color: #00000076;
+    display: flex;
+    flex-direction: row;
+    z-index: 1000;
+
+    transition: transform 0.4s ease-in-out; 
+}
+.chat-sliding-panel.closed {
+    transform: translateX(-100%);
+}
+.chat-sliding-panel.open {
+    transform: translateX(0);
+}
+.chat-handle {
+    position: absolute;
+    bottom: 5%;
+    left: 105%;
+    height: 10svh;
+    width: 8svh;
+    background-color: var(--white);
+    border-radius: 2svh;
+    cursor: pointer;
+    opacity: 0.0;
+    transition: opacity 0.3s, background-color 0.3s;
+
+    background-image: linear-gradient(
+        to bottom,
+        transparent 20%,
+        var(--darkBrown) 20%, var(--darkBrown) 26%,
+        transparent 26%, transparent 40%,
+        var(--darkBrown) 40%, var(--darkBrown) 46%,
+        transparent 46%, transparent 60%,
+        var(--darkBrown) 60%, var(--darkBrown) 66%,
+        transparent 66%, transparent 80%,
+        var(--darkBrown) 80%, var(--darkBrown) 86%,
+        transparent 86%
+    );
+    background-size: 70% 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.chat-handle.close {
+    opacity: 1.0;
+}
+.chat-handle span {
+    transform: rotate(-90deg);
+    font-family:'Courier New';
+}
+@keyframes changeColor {
+    0% { 
+        box-shadow: 0 0 0 0 rgba(238, 206, 119, 0.7);
+        background-color: var(--orange);
+    }
+    25% { 
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+        background-color: var(--white);
+    }
+    50% { 
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+        background-color: var(--white);
+    }
+    75% { 
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+        background-color: var(--white);
+    }
+    100% { 
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+        background-color: var(--white);
+    }
+}
+@keyframes bubbleBounce {
+    0%, 100% { transform: translateY(0) scale(1, 1); animation-timing-function: ease-out; }
+    45% { transform: translateY(-30px) scale(1, 1); animation-timing-function: ease-in; }
+    90% { transform: translateY(0) scale(1, 1); animation-timing-function: ease-in; }
+    95% { transform: translateY(0) scale(1.15, 0.85); }
+}
+.chat-handle.notify-animation {
+    opacity: 1.0;
+    animation: 
+        bubbleBounce 1.2s infinite ease-in-out, 
+        changeColor 1.2s infinite linear;
+}
+
+
+.chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.chat-header {
+    background-color: var(--lightBlack);
+    color: var(--white);
+    padding: 2.0svh 4.0svh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family:'Courier New';
+}
+.chat-close {
+  color: var(--orange);
+  font-weight: bold;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family:'Courier New'
+}
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.message-wrapper.me {
+    align-items: flex-end;
+}
+.message-wrapper.other {
+    align-items: flex-start;
+}
+.message-entete {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+    padding: 0 4px;
+}
+.message-bubble {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 1rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+.me .message-bubble {
+    background-color: var(--orange);
+    color: var(--white);
+    border-bottom-right-radius: 4px;
+}
+.other .message-bubble {
+    background-color: var(--white);
+    color: #333;
+    border-bottom-left-radius: 4px;
+}
+
+
+.chat-input-area {
+    display: flex;
+    padding: 15px;
+    background-color: var(--lightBlack);
+}
+.chat-input-area input {
+    flex: 1;
+    width: 50%;
+    padding: 1svw 1svh;
+    border: 1px solid var(--white);
+    border-radius: 25px;
+    outline: none;
+    font-size: 1rem;
+    background-color: var(--darkBrown);
+    color: var(--white);
+    font-family:'Courier New';
+}
+.chat-input-area input:focus {
+    border-color: var(--orange);
+}
+.chat-input-area button {
+    background-color: var(--orange);
+    opacity: 0.8;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    margin-left: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.2s;
+    font-family:'Courier New'
+}
+.chat-input-area button:hover {
+    opacity: 1.0;
+}

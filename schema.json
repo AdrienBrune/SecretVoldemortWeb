@@ -16,6 +16,13 @@
 {
     "type": "command",
     "content": {
+        "command": "chatbox",
+        "chatbox": "bonjour à tous",
+    }
+},
+{
+    "type": "command",
+    "content": {
         "command": "rename",
         "rename": "Beatrix"
     }
@@ -173,6 +180,16 @@
     "content": {
         "message": "la partie va bientôt commencer..."
     }
+}
+//----------------------------------
+//  CHATBOX
+//----------------------------------
+{
+   "type": "chatbox",
+    "content": {
+        "sender": "uuid",
+        "message": "bonjour"
+    } 
 }
 //----------------------------------
 //  IDENTIFY

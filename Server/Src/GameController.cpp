@@ -69,6 +69,24 @@ void GameController::BroadCastDelay(int timeSeconds)
     m_server->Broadcast(object);
 }
 
+void GameController::BroadCastChatboxMessage(const std::string& senderUuid, const std::string& message)
+{
+    ENSURE_SERVER_REGISTERED();
+
+    std::vector<Player>& players = GameStatus::GetInstance().GetPlayers();
+    for (Player& player : players)
+    {
+        nlohmann::json object = {
+            {"type", "chatbox"},
+            {"content", {
+                {"sender", senderUuid},
+                {"message", message}
+            }}
+        };
+        m_server->Send(player.GetUuid(), object);
+    }
+}
+
 void GameController::BroadCastGameStatus()
 {
     ENSURE_SERVER_REGISTERED();
@@ -113,6 +131,11 @@ void GameController::OnCommand(const std::string& uuid, const nlohmann::json& me
                 player->get().SetName(name);
                 BroadCastGameStatus();
             }
+        }
+        else if (command == "chatbox")
+        {
+            std::string chatMessage = message.at(command).get<std::string>();
+            BroadCastChatboxMessage(uuid, chatMessage);
         }
         else
         {

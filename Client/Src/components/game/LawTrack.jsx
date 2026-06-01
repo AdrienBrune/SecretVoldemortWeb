@@ -10,137 +10,73 @@ const FACTIONS = {
   deatheater: {
     image: imgLawDeatheater,
     max:   6,
-    color: "#b36dc7",
+    color: theme.violet,
     label: 'Mangemort',
   },
   phenixorder: {
     image: imgLawPhenixorder,
     max:   5,
-    color: "#cb3b45",
+    color: theme.red,
     label: 'Ordre du Phénix',
   },
 }
 
-/* ── Dos de carte pour la pioche ── */
-function CardBack({ stackCount }) {
-  return (
-    <div style={{
-      width: '100%', height: '100%',
-      background: theme.nearBlack,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-    }}>
-      <div style={{ position: 'absolute', inset: '0.7svh', border: `0.35svh solid ${theme.orange}96`, borderRadius: '1.2svh' }} />
-      {stackCount > 0 && (
-        <span style={{
-          color: theme.white,
-          fontSize: '5svh',
-          fontFamily: 'system-ui, sans-serif',
-          fontWeight: '300',
-          zIndex: 1,
-          lineHeight: 1,
-        }}>
-          {stackCount}
-        </span>
-      )}
-    </div>
-  )
-}
+const animationStyles = `
+  @keyframes activeLawGlow {
+    0% { box-shadow: 0 0 2px var(--glow-color); filter: brightness(1); }
+    50% { box-shadow: 0 0 12px var(--glow-color), 0 0 4px var(--glow-color); filter: brightness(1.4); }
+    100% { box-shadow: 0 0 2px var(--glow-color); filter: brightness(1); }
+  }
 
-/* ── Slot générique avec bordure pointillée ── */
-function CardSlot({ label, height, onDraw, children }) {
-  const [hovered, setHovered] = useState(false)
-  const clickable = !!onDraw
+  @keyframes floatUpAndFade {
+    0% {
+      transform: translateY(0) translateX(0) scale(0.4);
+      opacity: 0;
+    }
+    15% {
+      /* L'opacité max de la particule est bridée par la variable --max-opacity */
+      opacity: var(--max-opacity);
+    }
+    100% {
+      transform: translateY(-150px) translateX(var(--drift)) scale(1.1);
+      opacity: 0;
+    }
+  }
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '0.5svh',
-        height,
-      }}
-    >
-      <span style={{
-        fontSize: '2svh',
-        color: clickable ? theme.orange : theme.white,
-        fontFamily: 'Georgia, serif',
-        letterSpacing: '1px',
-        flexShrink: 0,
-        transition: 'color 0.15s ease',
-      }}>
-        {label}
-      </span>
-      <div
-        onClick={clickable ? onDraw : undefined}
-        onMouseEnter={clickable ? () => setHovered(true)  : undefined}
-        onMouseLeave={clickable ? () => setHovered(false) : undefined}
-        style={{
-          flex: 1,
-          minHeight: 0,
-          aspectRatio: '5 / 7',
-          border: clickable
-            ? `1.5px solid ${hovered ? theme.orange : theme.orange + '88'}`
-            : `1.5px dashed ${theme.white}`,
-          borderRadius: '6px',
-          overflow: 'hidden',
-          background: 'rgba(0,0,0,0.2)',
-          cursor: clickable ? 'pointer' : 'default',
-          transform: clickable && hovered ? 'scale(1.05)' : 'scale(1.0)',
-          boxShadow: clickable && hovered ? `0 0 16px ${theme.orange}66` : 'none',
-          transition: 'transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease',
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  )
-}
-
-/* ── Slot défausse ── */
-function DiscardSlot({ height, discardPile }) {
-  const count = discardPile.length
-
-  return (
-    <div style={{ height, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5svh' }}>
-      {/* Label */}
-      <span style={{
-        fontSize: '2svh',
-        color: theme.white,
-        fontFamily: 'Georgia, serif',
-        letterSpacing: '1px',
-        flexShrink: 0,
-      }}>
-        Défausse
-      </span>
-
-      {/* Dos de carte avec compteur (identique à la pioche) */}
-      <div style={{
-        flex: 1,
-        minHeight: 0,
-        aspectRatio: '5 / 7',
-        border: `1.5px dashed ${theme.white}`,
-        borderRadius: '6px',
-        overflow: 'hidden',
-        background: 'rgba(0,0,0,0.2)',
-      }}>
-        {count > 0
-          ? <CardBack stackCount={count} />
-          : null
-        }
-      </div>
-    </div>
-  )
-}
-
+  @keyframes auraPulse {
+    0% { filter: drop-shadow(0 0 var(--shadow-min) var(--glow-color)) brightness(1); }
+    50% { filter: drop-shadow(0 0 var(--shadow-max) var(--glow-color)) brightness(calc(1 + var(--intensity) * 0.2)); }
+    100% { filter: drop-shadow(0 0 var(--shadow-min) var(--glow-color)) brightness(1); }
+  }
+`;
 
 /* ── Pile de lois votées ── */
 function LawStack({ faction, voted }) {
   const cfg = FACTIONS[faction]
+  
+  const intensity = cfg.max > 0 ? voted / cfg.max : 0
+  const particleCount = voted * (8 + voted * 1.5) 
+  const maxOpacity = 0.2 + intensity * 0.8
+  const shadowMin = `${1 + intensity * 4}px`
+  const shadowMax = `${8 + intensity * 16}px`
+
+  // Distribution et physique des particules
+  const particles = Array.from({ length: particleCount }).map((_, i) => {
+    const baseSize = 1 + intensity * 3.5 
+    const size = `${baseSize + Math.random() * 3}px`
+    const baseDuration = 4.5 - intensity * 2 // De 4.5s (lent/calme) à 2.5s (rapide/énergique)
+    const duration = `${baseDuration + Math.random() * 1.5}s`
+
+    return {
+      id: i,
+      left: `${5 + Math.random() * 90}%`,
+      top: `${10 + Math.random() * 85}%`,
+      delay: `${Math.random() * -5}s`,
+      duration,
+      size,
+      drift: `${(Math.random() - 0.5) * (20 + intensity * 30)}px`,
+    }
+  })
 
   return (
     <div style={{
@@ -152,6 +88,8 @@ function LawStack({ faction, voted }) {
       aspectRatio: '5 / 7',
     }}>
 
+      <style>{animationStyles}</style>
+
       {/* Barre de progression */}
       <div style={{ display: 'flex', gap: '0.4svw', flexShrink: 0 }}>
         {Array.from({ length: cfg.max }).map((_, i) => (
@@ -159,26 +97,73 @@ function LawStack({ faction, voted }) {
             width: '1.5svw', height: '0.5svh', borderRadius: '2px',
             background: i < voted ? cfg.color : theme.white,
             transition: 'background 0.3s',
+            '--glow-color': cfg.color, 
+            animation: voted ? 'activeLawGlow 2.5s ease-in-out infinite' : 'none',
+            animationDelay: `${i * 0.15}s`,
           }} />
         ))}
       </div>
 
-      {/*
-        Wrapper flex:1 sans largeur explicite.
-        Son enfant (height:100% + aspectRatio) calcule sa largeur depuis sa hauteur :
-        le wrapper hérite de cette largeur comme min-content → LawStack width = card width.
-      */}
-      <div style={{ flex: 1, minHeight: 0 }}>
+      {/* Wrapper de la carte */}
+      <div style={{ flex: 1, minHeight: 0, width: '100%' }}>
         <div style={{
+          position: 'relative',
           height: '100%',
           aspectRatio: '5 / 7',
           borderRadius: '7px',
-          overflow: 'hidden',
-          boxShadow: `0 4px 18px ${cfg.color}44`,
+          '--glow-color': cfg.color,
+          '--intensity': intensity,
+          '--shadow-min': shadowMin,
+          '--shadow-max': shadowMax,
+          animation: voted > 0 ? 'auraPulse 3s ease-in-out infinite' : 'none',
+          transition: 'all 0.5s ease',
         }}>
-          <img src={cfg.image} alt={cfg.label} draggable={false}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none', userSelect: 'none' }}
-          />
+          
+          {/* Conteneur global des particules */}
+          {voted > 0 && (
+            <div style={{
+              position: 'absolute',
+              top: '-15%',
+              left: '-5%',
+              width: '110%',
+              height: '115%',
+              zIndex: 2, 
+              pointerEvents: 'none',
+              mixBlendMode: 'screen',
+              '--max-opacity': maxOpacity,
+            }}>
+              {particles.map((p) => (
+                <div
+                  key={p.id}
+                  style={{
+                    position: 'absolute',
+                    top: p.top,
+                    left: p.left,
+                    width: p.size,
+                    height: p.size,
+                    borderRadius: '50%',
+                    background: `radial-gradient(circle, #ffffff 30%, ${cfg.color} 80%, transparent 100%)`,
+                    boxShadow: `0 0 ${1 + intensity * 4}px ${cfg.color}, 0 0 ${3 + intensity * 6}px ${cfg.color}`,
+                    '--drift': p.drift,
+                    animation: `floatUpAndFade ${p.duration} linear infinite`,
+                    animationDelay: p.delay,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Conteneur de l'image de la carte */}
+          <div style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: '7px',
+            boxShadow: `0 4px 18px ${cfg.color}44`,
+          }}>
+            <img src={cfg.image} alt={cfg.label} draggable={false}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none', userSelect: 'none' }}
+            />
+          </div>
         </div>
       </div>
 
@@ -195,13 +180,6 @@ export default function LawTrack({ board, laws }) {
   const stackCount       = laws?.stack?.length        ?? 0
   const discardPile      = laws?.discard              ?? []
 
-  const slotHeight = 'calc(50% - 0.4rem)'
-
-  // Draw pile only clickable for the Minister at step minister_draw
-  const onDraw = (me?.minister && gameStatus?.step?.id === STEPS.minister_draw)
-    ? () => sendResponse({ draw: true })
-    : null
-
   return (
     <div style={{
       height: '100%',
@@ -211,34 +189,14 @@ export default function LawTrack({ board, laws }) {
       justifyContent: 'center',
       gap: '0.6rem',
       padding: '0.4rem 1rem',
-      overflow: 'hidden',
       userSelect: 'none',
       cursor: 'default',
     }}>
-
       {/* Les deux piles de lois */}
       <div style={{ display: 'flex', gap: '1.5svw', height: '100%', alignItems: 'center' }}>
         <LawStack faction="deatheater"  voted={deathEaterVoted} />
         <LawStack faction="phenixorder" voted={phenixOrderVoted} />
       </div>
-
-      {/* Colonne droite : pioche + défausse */}
-      <div style={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        gap: '0.5rem',
-        flexShrink: 0,
-        aspectRatio: '2 / 3',
-      }}>
-        <CardSlot label="Pioche" height={slotHeight} onDraw={onDraw}>
-          <CardBack stackCount={stackCount} />
-        </CardSlot>
-
-        <DiscardSlot height={slotHeight} discardPile={discardPile} />
-      </div>
-
     </div>
   )
 }

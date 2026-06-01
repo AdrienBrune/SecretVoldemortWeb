@@ -11,6 +11,7 @@ export default defineConfig({
         target: 'ws://localhost:8080',
         ws: true,
       }
-    }
+    },
+    port: 8080,
   }
 })

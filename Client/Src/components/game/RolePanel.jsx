@@ -175,7 +175,7 @@ export default function RolePanel() {
       onMouseLeave={() => setHovered(false)}
       style={{
         position: 'relative',
-        width: '10px',
+        width: '8svh',
         flexShrink: 0,
         height: '100%',
         zIndex: 10,
@@ -183,17 +183,33 @@ export default function RolePanel() {
         alignItems: 'center',
       }}
     >
-      {/* ── Barre discrète (état fermé) ── */}
-      <div style={{
-        width: '10px',
-        height: '40%',
-        background: hovered
-          ? 'rgba(255,255,255,0.0)'
-          : 'rgba(255,255,255,0.4)',
-        transition: 'background 0.2s ease',
-        borderRadius: '3px 0 0 3px',
-        cursor: 'pointer',
-      }} />
+      {/* ── Barre verticale "RÔLE SECRET" (état fermé) ── */}
+      <div 
+        style={{
+          width: '100%',
+          height: '40%',
+          background: hovered
+            ? 'rgba(255, 255, 255, 0.15)'
+            : 'rgba(255, 255, 255, 0.4)',
+          transition: 'background 0.2s ease, color 0.2s ease',
+          borderRadius: '0 1svh 1svh 0',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          writingMode: 'vertical-rl',
+          transform: 'rotate(180deg)',
+          color: `${theme.white}`,
+          fontFamily: 'Courier New',
+          fontSize: '3svh',
+          fontWeight: 'bold',
+          letterSpacing: '0.1svh',
+          userSelect: 'none',
+          opacity: hovered ? 0 : 1,
+        }}
+      >
+        ROLE SECRET
+      </div>
 
       {/* ── Panneau déroulant (état ouvert) ── */}
       <div style={{
@@ -204,16 +220,17 @@ export default function RolePanel() {
         height: '100%',
         overflow: 'hidden',
         transition: 'width 0.25s ease',
-        background: `${theme.nearBlack}DC`,
+        background: `${theme.nearBlack}C0`,
         borderRadius: '8px 0 0 8px',
         borderLeft:   `1px solid rgba(255,255,255,${hovered ? '0.12' : '0'})`,
         borderTop:    `1px solid rgba(255,255,255,${hovered ? '0.08' : '0'})`,
         borderBottom: `1px solid rgba(255,255,255,${hovered ? '0.08' : '0'})`,
+        opacity: 1,
       }}>
 
         {/* Contenu scrollable */}
         <div className="scrollbar-roles" style={{
-          width: '13svw',         // actual width to prevent shrinking during animation
+          width: '13svw',
           height: '100%',
           padding: '1.2svh 0.9svw',
           display: 'flex',

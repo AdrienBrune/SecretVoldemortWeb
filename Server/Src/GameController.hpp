@@ -27,6 +27,7 @@ public:
     void SendPopup(const std::string& uuid, std::string message, int timeout, std::string image = "");
     void BroadcastPopup(std::string message, int timeout);
     void BroadCastDelay(int timeSeconds);
+    void BroadCastChatboxMessage(const std::string& senderUuid, const std::string& message);
     void BroadCastGameStatus();
 
     // callbacks

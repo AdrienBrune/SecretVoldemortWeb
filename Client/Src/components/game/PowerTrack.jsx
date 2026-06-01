@@ -11,37 +11,52 @@ const POWER_INFO = {
   avada_kedavra: {
     image: imgAvadaKedavra,
     label: 'Avada Kedavra',
-    desc:  'Le Ministre de la magie élimine définitivement un joueur de votre choix.',
+    desc:  'Le Ministre de la magie élimine définitivement un joueur de votre choix',
   },
   impero: {
     image: imgImpero,
     label: 'Imperio',
-    desc:  "Le Ministre de la magie examine la carte de faction d'un joueur.",
+    desc:  "Le Ministre de la magie examine la carte de faction d'un joueur",
   },
   divination: {
     image: imgDivination,
     label: 'Divination',
-    desc:  'Le Ministre de la magie consulte les 3 prochaines lois de la pile.',
+    desc:  'Le Ministre de la magie consulte les 3 prochaines lois de la pile',
   },
   endoloris: {
     image: imgEndoloris,
     label: 'Endoloris',
-    desc:  'Le Ministre de la magie désigne le prochain Ministre de la Magie.',
+    desc:  'Le Ministre de la magie désigne le prochain Ministre de la Magie',
   },
 }
 
+// Injection d'une classe CSS globale pour gérer le zoom fluide et l'affichage du tooltip proprement
+const hoverStyles = `
+  .power-slot-container {
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.2s, background 0.2s !important;
+  }
+  /* Zoom de la box sans impacter les voisins */
+  .power-slot-container:hover {
+    transform: scale(1.08);
+    z-index: 10;
+  }
+  /* Affichage du tooltip uniquement au survol */
+  .power-slot-container:hover .power-tooltip {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(-50%) translateY(0) !important;
+  }
+`;
+
 function PowerSlot({ power, isUsed, isCurrent }) {
-  const [hovered, setHovered] = useState(false)
   const info = POWER_INFO[power] ?? null
 
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="power-slot-container"
       style={{
         position: 'relative',
         height: '70%',
-        maxHeight: '7svh',
         aspectRatio: '1 / 1',
         borderRadius: '6px',
         border: isCurrent
@@ -55,9 +70,10 @@ function PowerSlot({ power, isUsed, isCurrent }) {
         flexShrink: 0,
         userSelect: 'none',
         cursor: 'default',
-        transition: 'border-color 0.2s, background 0.2s',
       }}
     >
+      <style>{hoverStyles}</style>
+
       {info && (
         <img
           src={info.image}
@@ -75,25 +91,31 @@ function PowerSlot({ power, isUsed, isCurrent }) {
         />
       )}
 
-      {info && hovered && (
-        <div style={{
-          position: 'absolute',
-          bottom: 'calc(100% + 0.8svh)',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(0,0,0,0.9)',
-          border: `1px solid ${theme.orange}66`,
-          borderRadius: '6px',
-          padding: '0.4rem 0.7rem',
-          whiteSpace: 'nowrap',
-          zIndex: 30,
-          pointerEvents: 'none',
-          userSelect: 'none',
-        }}>
-          <p style={{ color: theme.orange, fontSize: '0.7rem', fontFamily: 'Georgia, serif', margin: '0 0 0.2rem 0', fontWeight: 'bold' }}>
+      {info && (
+        <div 
+          className="power-tooltip"
+          style={{
+            position: 'absolute',
+            bottom: 'calc(100% + 0.8svh)',
+            left: '50%',
+            transform: 'translateX(-50%) translateY(4px)', 
+            background: 'rgba(0,0,0,0.95)',
+            border: `1px solid ${theme.orange}66`,
+            borderRadius: '6px',
+            padding: '0.4rem 0.7rem',
+            whiteSpace: 'nowrap',
+            zIndex: 30,
+            pointerEvents: 'none',
+            userSelect: 'none',
+            opacity: 0,
+            visibility: 'hidden',
+            transition: 'opacity 0.2s ease, transform 0.2s ease, visibility 0.2s',
+          }}
+        >
+          <p style={{ color: theme.orange, fontSize: '0.7rem', fontFamily: 'Courier New', margin: '0 0 0.2rem 0', fontWeight: 'bold' }}>
             {info.label}
           </p>
-          <p style={{ color: '#ccc', fontSize: '0.65rem', fontFamily: 'Georgia, serif', margin: 0 }}>
+          <p style={{ color: '#ccc', fontSize: '0.65rem', fontFamily: 'Courier New', margin: 0 }}>
             {info.desc}
           </p>
         </div>
@@ -110,10 +132,8 @@ export default function PowerTrack({ powers = [], deathEaterVoted = 0 }) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: '0.5rem',
-      padding: '0.4rem 1rem',
       userSelect: 'none',
       cursor: 'default',
-      marginRight: '18svw',
     }}>
       {powers.map((power, i) => (
         <PowerSlot

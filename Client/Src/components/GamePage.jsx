@@ -1,12 +1,13 @@
-﻿import { useMemo } from 'react'
-import { useGame } from '../context/GameContext'
-import { STEPS }   from '../constants/steps'
-import PlayerList    from './game/PlayerList'
-import GameBoard     from './game/GameBoard'
-import RolePanel     from './game/RolePanel'
-import BottomBar     from './game/BottomBar'
-import PopupOverlay   from './PopupOverlay'
+﻿import { useMemo }  from 'react'
+import { useGame }  from '../context/GameContext'
+import { STEPS }    from '../constants/steps'
+import PlayerList   from './game/PlayerList'
+import GameBoard    from './game/GameBoard'
+import RolePanel    from './game/RolePanel'
+import BottomBar    from './game/BottomBar'
+import PopupOverlay from './PopupOverlay'
 import ActionPopup  from './ActionPopup'
+import Chatbox      from './game/Chatbox';
 
 export default function GamePage({ onNavigate }) {
   const { gameStatus, me, myUuid, sendResponse } = useGame()
@@ -42,6 +43,10 @@ export default function GamePage({ onNavigate }) {
       userSelect: 'none',
       cursor: 'default',
     }}>
+
+      <Chatbox
+        players={gameStatus?.players ?? []}
+      />
 
       {/* ── Top : 75svh ── */}
       <div style={{ height: '75svh', display: 'flex' }}>
