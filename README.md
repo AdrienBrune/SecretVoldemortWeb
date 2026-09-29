@@ -2,6 +2,10 @@
 
 # ⚡ Secret Voldemort
 
+<p align="center">
+  <img width="180" height="270" alt="Secret_Voldemort_Cover" src="https://github.com/user-attachments/assets/9151ed22-5919-4ef1-a115-682d53ec6afa" />
+</p>
+
 *A strategic social deduction game set in the wizarding world.*
 
 ---
