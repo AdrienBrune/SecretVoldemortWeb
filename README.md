@@ -8,7 +8,9 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Author](https://img.shields.io/badge/author-Adrien%20Brune-orange.svg)
-![Status](https://img.shields.io/badge/status-active-success.svg)
+![Language](https://img.shields.io/badge/Language-React%20%7C%20C++-yellow.svg)
+![Platform](https://img.shields.io/badge/platform-Web-lightgrey.svg)
+![Status](https://img.shields.io/badge/status-completed-success.svg)
 
 </div>
 
@@ -37,9 +39,7 @@ Want to learn how to play or check the official mechanics?
 ## 📸 Game Preview
 
 <p align="center">
-  <img width="1278" height="608" alt="image" src="https://github.com/user-attachments/assets/82c3b929-5ba6-4b22-8f35-c3bf9130cd28" />
-
-  <img width="48%" height="220px" style="object-fit: cover;" alt="Game Preview 1" src="https://github.com/user-attachments/assets/71f49346-05ca-442b-9246-f5c36a7c2294" />
+  <img width="48%" height="220px" style="object-fit: cover;" alt="Game Preview 1" src="https://github.com/user-attachments/assets/82c3b929-5ba6-4b22-8f35-c3bf9130cd28" />
   <img width="48%" height="220px" style="object-fit: cover;" alt="Game Preview 2" src="https://github.com/user-attachments/assets/72cf53a4-39da-4405-9ab9-1ea6c0a73f3b" />
   <br><br>
   <img width="48%" height="220px" style="object-fit: cover;" alt="Game Preview 3" src="https://github.com/user-attachments/assets/8fcff7c2-eafa-45d7-97e0-e514055bb891" />
