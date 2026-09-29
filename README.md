@@ -18,4 +18,10 @@ When the game starts you are alone. Try your best to discover players's role and
 
 Official Secret Hitler rules : https://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf  
 Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGirl
+
+<img width="869" height="512" alt="image" src="https://github.com/user-attachments/assets/71f49346-05ca-442b-9246-f5c36a7c2294" />
+<img width="1250" height="598" alt="image" src="https://github.com/user-attachments/assets/72cf53a4-39da-4405-9ab9-1ea6c0a73f3b" />
+<img width="861" height="444" alt="image" src="https://github.com/user-attachments/assets/8fcff7c2-eafa-45d7-97e0-e514055bb891" />
+<img width="893" height="439" alt="image" src="https://github.com/user-attachments/assets/e910e0a0-3d22-4a99-a349-252c19857287" />
+
   
